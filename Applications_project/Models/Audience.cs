@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Applications_project.Models;
+namespace Applications_project;
 
 public partial class Audience
 {
     public short Id { get; set; }
 
-    public string? AudienceNumber { get; set; } = null!;
+    public string? AudienceNumber { get; set; }
 
     public string? AudienceName { get; set; }
 

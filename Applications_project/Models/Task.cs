@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Applications_project.Models;
+namespace Applications_project;
 
 public partial class Task
 {
@@ -17,6 +17,8 @@ public partial class Task
 
     public short IdEmployee { get; set; }
 
+    public short IdStatus { get; set; }
+
     public virtual Audience IdAudienceNavigation { get; set; } = null!;
 
     public virtual Category IdCategoryNavigation { get; set; } = null!;
@@ -25,5 +27,5 @@ public partial class Task
 
     public virtual Sender IdSenderNavigation { get; set; } = null!;
 
-    public virtual ICollection<StatusesTask> StatusesTasks { get; set; } = new List<StatusesTask>();
+    public virtual Status IdStatusNavigation { get; set; } = null!;
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Applications_project.Models;
+namespace Applications_project;
 
 public partial class ApplicationsContext : DbContext
 {
@@ -27,13 +27,11 @@ public partial class ApplicationsContext : DbContext
 
     public virtual DbSet<Status> Statuses { get; set; }
 
-    public virtual DbSet<StatusesTask> StatusesTasks { get; set; }
-
     public virtual DbSet<Task> Tasks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("host=localhost;port=5432;database=Applications;username=postgres;password=1111");
+        => optionsBuilder.UseNpgsql("host=localhost;port=5432;database=Applications;username=postgres;password=1234");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -110,39 +108,6 @@ public partial class ApplicationsContext : DbContext
             entity.Property(e => e.StatusName).HasColumnName("status_name");
         });
 
-        modelBuilder.Entity<StatusesTask>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("statuses_tasks_pkey");
-
-            entity.ToTable("statuses_tasks");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.IdEmployee)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id_employee");
-            entity.Property(e => e.IdStatus)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id_status");
-            entity.Property(e => e.IdTask)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id_task");
-            entity.Property(e => e.StatusDate).HasColumnName("status_date");
-
-            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.StatusesTasks)
-                .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("statuses_tasks_id_employee_fkey");
-
-            entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.StatusesTasks)
-                .HasForeignKey(d => d.IdStatus)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("statuses_tasks_id_status_fkey");
-
-            entity.HasOne(d => d.IdTaskNavigation).WithMany(p => p.StatusesTasks)
-                .HasForeignKey(d => d.IdTask)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("statuses_tasks_id_task_fkey");
-        });
-
         modelBuilder.Entity<Task>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("tasks_pkey");
@@ -150,7 +115,9 @@ public partial class ApplicationsContext : DbContext
             entity.ToTable("tasks");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Description)
+                .HasMaxLength(200)
+                .HasColumnName("description");
             entity.Property(e => e.IdAudience)
                 .HasDefaultValueSql("nextval('\"tasks_id audience_seq\"'::regclass)")
                 .HasColumnName("id_audience");
@@ -163,6 +130,7 @@ public partial class ApplicationsContext : DbContext
             entity.Property(e => e.IdSender)
                 .HasDefaultValueSql("nextval('\"tasks_id sender_seq\"'::regclass)")
                 .HasColumnName("id_sender");
+            entity.Property(e => e.IdStatus).HasColumnName("id_status");
 
             entity.HasOne(d => d.IdAudienceNavigation).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.IdAudience)
@@ -183,6 +151,11 @@ public partial class ApplicationsContext : DbContext
                 .HasForeignKey(d => d.IdSender)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("tasks_id_sender_fkey");
+
+            entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.Tasks)
+                .HasForeignKey(d => d.IdStatus)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("tasks_id_status_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

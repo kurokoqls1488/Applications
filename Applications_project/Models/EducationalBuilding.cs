@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Applications_project.Models;
+namespace Applications_project;
 
 public partial class EducationalBuilding
 {

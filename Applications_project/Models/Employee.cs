@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Applications_project.Models;
+namespace Applications_project;
 
 public partial class Employee
 {
@@ -14,8 +14,6 @@ public partial class Employee
     public DateOnly DateOfReceipt { get; set; }
 
     public DateOnly? DateOfDismissal { get; set; }
-
-    public virtual ICollection<StatusesTask> StatusesTasks { get; set; } = new List<StatusesTask>();
 
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 }

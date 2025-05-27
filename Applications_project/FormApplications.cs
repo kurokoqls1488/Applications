@@ -1,8 +1,7 @@
-using Applications_project.Models;
+
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.ComponentModel;
-using Task = Applications_project.Models.Task;
 
 namespace Applications_project
 {
@@ -28,7 +27,6 @@ namespace Applications_project
             db.Employees.Load();
             db.Senders.Load();
             db.Statuses.Load();
-            db.StatusesTasks.Load();
             db.Tasks.Load();
 
             var applications = db.Tasks.Local.OrderBy(p => p.Id).ToList();
@@ -169,7 +167,8 @@ namespace Applications_project
                 IdCategory = (short)formAdd.Category.SelectedValue,
                 IdEmployee = (short)formAdd.Employee.SelectedValue,
                 IdSender = (short)formAdd.Sender.SelectedValue,
-                IdAudience = (short)formAdd.Location.SelectedValue
+                IdAudience = (short)formAdd.Location.SelectedValue,
+                IdStatus = 2
             };
 
             db.Tasks.Add(newTask);

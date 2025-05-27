@@ -1,8 +1,6 @@
-﻿using Applications_project.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Xml.Linq;
-using Task = Applications_project.Models.Task;
 
 
 namespace Applications_project
